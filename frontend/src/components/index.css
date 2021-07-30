@@ -1,0 +1,10 @@
+.StripeContainer_component{
+    width: 96%;
+    height: 96%;
+    margin: auto;
+    display: flex;
+}
+.StripeContainer_element{
+    margin: 0 auto;
+    margin-top: 10%;
+}
