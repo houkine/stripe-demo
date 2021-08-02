@@ -4,7 +4,52 @@
     margin: auto;
     display: flex;
 }
-.StripeContainer_element{
-    margin: 0 auto;
-    margin-top: 10%;
+.Form_container{
+    width: 100%;
+    margin: auto;
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+
+
+}
+.Form_header{
+    margin: 10px auto;
+    /* margin-top: 0px; */
+    display: flex;
+
+    font-size: 24px;
+    color: blue;
+}
+.Form_body{
+    /* display: flex; */
+
+    font-size: 24px;
+    /* overflow-y: auto; */
+}
+.Form_body_left{
+    /* width: 1500px; */
+    width: 40%;
+    min-width: 450px;
+
+    /* border-style: solid; */
+}
+.Form_body_right{
+    flex-grow: 1;
+    margin: 0 5%;
+}
+.Form_body_right_item{
+    width: 100%;
+    display: flex;
+    margin-top: 5px;
+}
+.Form_body_right_itemIndex{
+    /* width: 100%; */
+    font-size: 14px;
+    color: blue;
+}
+.Form_body_right_itemContent{
+    flex-grow: 1;
+    color: black;
+    font-size: 14px;
 }

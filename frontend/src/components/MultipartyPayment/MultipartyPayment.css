@@ -1,0 +1,17 @@
+.MultipartyPayment_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    border-style: solid;
+    border-color: blue;
+    border-radius: 10px;
+
+    /* background-color: #0000FF10; */
+
+}
+.HookCheckOutForm_item{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+}

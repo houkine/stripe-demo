@@ -5,9 +5,11 @@ var router = express.Router();
 
 // const userRouter = require('./user')
 const directChargeRouter = require('./directCharge')
+const resultRouter = require('./result')
 
 // router.use('/user', userRouter)
 router.use('/directCharge', directChargeRouter)
+router.use('/result', resultRouter)
 
 
 module.exports = router;
