@@ -1,17 +1,66 @@
 .MultipartyPayment_container{
     width: 100%;
     display: flex;
+    /* background-color: #0000FF10; */
+    /* border-style: solid; */
+
+}
+.MultipartyPayment_item{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+}
+.MultipartyPayment_form{
+    width: 45%;
+    margin: auto;
+    margin-top: 5px;
+    display: flex;
     flex-direction: column;
 
     border-style: solid;
     border-color: blue;
     border-radius: 10px;
-
-    /* background-color: #0000FF10; */
-
 }
-.HookCheckOutForm_item{
-    margin-top: 20px;
+.MultipartyPayment_title{
+    margin: 5px auto;
+    font-size: 16px;
+    color: black;
+}
+.MultipartyPayment_cardName{
     width: 100%;
+    margin-top: 5px;
+    background-color: blue;
+    color: white;
+}
+.MultipartyPayment_card{
+    width: 90%;
+    margin: 5px auto;
+    background-color: #0000FF10;
+    padding: 10px;
+}
+.MultipartyPayment_cardDetail{
+    width: 90%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 10px;
+
     display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: blue;
+}
+.MultipartyPayment_button{
+    width: 90%;
+    margin: 5px auto;
+    background-color: blue;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    text-align: center;
+    font-size: 16px;
+    color: white;
+}
+.MultipartyPayment_description{
+    width: 50%;
 }

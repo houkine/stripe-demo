@@ -128,10 +128,10 @@ const HookDirectElement = () => {
         </div>
       </div>
 
-      {/* -------------------------------------------------------------------- customer UI,token*/}
+      {/* -------------------------------------------------------------------- customer UI*/}
       <div className={'HookCheckOutForm_item'}>
         <div className={'HookCheckOutForm_form'}>
-          <div className={'HookCheckOutForm_title'} >customer UI, token</div>
+          <div className={'HookCheckOutForm_title'} >customer UI</div>
           <div className={'HookCheckOutForm_cardDetail'} >
             <label for="number">card number:&nbsp;</label>
             <input type='text' value={number} name='number' onChange={e=>setNumber(e.target.value)}></input>

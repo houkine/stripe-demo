@@ -14,7 +14,7 @@
 
 }
 .Form_header{
-    margin: 10px auto;
+    margin: 5px auto;
     /* margin-top: 0px; */
     display: flex;
 
@@ -23,9 +23,11 @@
 }
 .Form_body{
     /* display: flex; */
-
+    width: 100%;
     font-size: 24px;
-    /* overflow-y: auto; */
+    margin: 5px auto;
+
+
 }
 .Form_body_left{
     /* width: 1500px; */

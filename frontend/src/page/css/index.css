@@ -50,6 +50,7 @@
 .index_body_mid{
     width: 60%;
     display: flex;
+    overflow-y: auto;
 }
 .index_body_right{
     border-left-style: solid;
