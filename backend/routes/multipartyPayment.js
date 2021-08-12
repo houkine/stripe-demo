@@ -12,34 +12,14 @@ const clientID = 'ca_JwdlRdCgDFfzaSbOZSnVd2FOCRWA5Vp8'
  * 3. send money to secound user
  */
 
+
 // create a account
 router.post('/createCustomerAccount', async function(req, res, next) {
+  let {email} = req.body
   const account = await stripe.accounts.create({
     type: 'custom',
     country: 'AU',
-    email:'test@gmail.com',
-    business_type: "individual",
-    individual: {
-      first_name: 'first',
-      last_name: 'last',
-      dob: {
-        day: 1,
-        month: 1,
-        year: 2000,
-      },
-      email: 'test@gmail.com',
-      // phone: '0402242123',
-      address: {
-        city: 'Brisbane',
-        country: 'AU',
-        line1: '1024 Ann',
-        postal_code: '4000',
-        state: 'QLD'
-      },
-    },
-    business_profile: {
-      url: 'http://24hour.konnectapplications.xyz'
-    },
+    email,
     capabilities: {
       card_payments: {requested: true},
       transfers: {requested: true},
@@ -50,8 +30,18 @@ router.post('/createCustomerAccount', async function(req, res, next) {
     }
   });
 
+  const AccountLink = await stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: 'https://www.google.com/',
+      return_url: 'https://www.google.com/',
+      type: 'account_onboarding',
+    }).catch(e=>{
+      return res.status(400).json(AccountLink)
+    });
+
   // Return and display the result of the charge.
-  return res.status(200).json(account)
+  console.log(AccountLink)
+  return res.status(200).json(AccountLink.url)
 })
 router.post('/createExpressAccount', async function(req, res, next) {
   const account = await stripe.accounts.create({
@@ -62,6 +52,24 @@ router.post('/createExpressAccount', async function(req, res, next) {
   return res.status(200).json(account)
 })
 
+router.get('/getAll', async function(req, res, next) {
+  const accounts = await stripe.accounts.list({limit:100,});
+  return res.status(200).json(accounts.data)
+})
+
+// get account activate link, used to verify user
+router.get('/createAccountLinks', async function(req, res, next) {
+  let {id}=req.query
+  const AccountLink = await stripe.accountLinks.create({
+    account: id,
+    refresh_url: 'https://www.google.com/',
+    return_url: 'https://www.google.com/',
+    type: 'account_onboarding',
+  }).catch(e=>{
+    return res.status(400).json(AccountLink)
+  });
+  return res.status(200).json(AccountLink)
+})
 // delete a account
 router.delete('/deleteAccount', async function(req, res, next) {
   let {id} = req.body
@@ -71,46 +79,7 @@ router.delete('/deleteAccount', async function(req, res, next) {
   // Return and display the result of the charge.
   return res.status(200).json(deleted)
 })
-router.get('/createAccountLinks', async function(req, res, next) {
-  let {id}=req.query
-  console.log('id:',id)
-  try {
-    // Create a Stripe Account link for the Connect Onboarding flow
-    stripe.accountLinks.create({
-      type: 'account_onboarding',
-      account: 'acct_1JKbto2R6lpi0msH',
-      // collect: 'currently_due',
-      success_url: 'https://www.google.com/',
-      failure_url: 'https://www.facebook.com/'
-    })
-    .then(result=>{
-      res.redirect(result.url);
-      console.log(result)
-    })
-    .catch(e=>{
-      console.log(e)
-    })
-    // Redirect to Stripe to start the Connect Onboarding flow.
-    // res.redirect(accountLink.url);
-    // console.log(AccountLink)
-    // res.status(200).json(AccountLink)
-  } catch (err) {
-    console.log('Error generating Connect Onboarding URL: ',err);
-    // return res.redirect('/pilots/dashboard');
-    return res.status(400).json(AccountLink)
 
-  }
-  // const AccountLink = await stripe.accountLinks.create({
-  //   account: 'acct_1JKbto2R6lpi0msH',
-  //   refresh_url: 'https://www.google.com/',
-  //   return_url: 'https://www.google.com/',
-  //   type: 'account_onboarding',
-  // }).catch(e=>{
-  //   return res.status(400).json(AccountLink)
-  // });
-
-  // return res.status(200).json(AccountLink)
-})
 
 router.post('/collectPayment', async function(req, res, next) {
 

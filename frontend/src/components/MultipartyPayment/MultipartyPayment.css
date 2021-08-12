@@ -4,6 +4,9 @@
     /* background-color: #0000FF10; */
     /* border-style: solid; */
 
+    display: flex;
+    flex-direction: column;
+
 }
 .MultipartyPayment_item{
     margin-top: 20px;
@@ -24,6 +27,25 @@
 .MultipartyPayment_title{
     margin: 5px auto;
     font-size: 16px;
+    color: black;
+}
+.MultipartyPayment_accountList{
+    width: 100%;
+    margin: 5px auto;
+    height: 200px;
+    overflow-y: auto;
+}
+.MultipartyPayment_accountItem{
+    margin: 5px auto;
+    font-size: 12px;
+    display: flex;
+}
+.MultipartyPayment_accountItemLabel{
+    color: blue;
+    margin-left: 10px;
+    margin-right: 3px;
+}
+.MultipartyPayment_accountItemContent{
     color: black;
 }
 .MultipartyPayment_cardName{

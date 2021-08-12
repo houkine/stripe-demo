@@ -8,6 +8,44 @@ import '../index.css'
 
 const MultipartyPayment = () => {
 
+  //---------------------------- all accounts
+  const [accounts,setAccounts] = useState([])
+  const getAccounts = () => {
+    instance.get(
+      '/multipartyPayment/getAll',
+      {}
+    )
+    .then((res) => {
+      // status error
+      if (res.status !== 200) {
+        console.log(res)
+      }else{
+        setAccounts(res.data)
+      }
+    })  
+    .catch(error=>console.log('error:',error))
+  }
+  useEffect(() => {
+    getAccounts()
+  }, [])
+  //---------------------------- new account
+  const [email,setEmail] = useState('')
+  const handleCreateCustomAccountOnClick = () =>{
+    instance.post(
+      '/multipartyPayment/createCustomerAccount',
+      {email}
+    )
+    .then((res) => {
+      // status error
+      if (res.status !== 200) {
+        console.log(res)
+      }else{
+        console.log(res.data)
+        window.open(res.data)
+      }
+    })  
+    .catch(error=>console.log('error:',error))
+  }
   //----------------------------card A
   const [Anumber,setANumber]=useState()
   const [Aexp_month,setAExp_month]=useState()
@@ -80,7 +118,52 @@ const MultipartyPayment = () => {
   }
   return (
     <div className={'MultipartyPayment_container'}>
+      {/* -----------------------------------list all stripe accounts connected to this stripe connect */}
       <div className={'MultipartyPayment_item'}>
+        <div className={'MultipartyPayment_form'}>
+          <div className={'MultipartyPayment_title'} >all accounts connected to the platform</div>
+          <div className={'MultipartyPayment_accountList'} >
+            {accounts.map((account,index)=>(
+              <div className={'MultipartyPayment_accountItem'} >
+                <div className={'MultipartyPayment_accountItemLabel'} >account:</div>
+                <div className={'MultipartyPayment_accountItemContent'} >{account.id}</div>
+                <div className={'MultipartyPayment_accountItemLabel'} >{'email: '}</div>
+                <div className={'MultipartyPayment_accountItemContent'} >{account.email}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={'MultipartyPayment_description'}>
+          {description_MultipartyPayment.map((record,index)=>(
+              <div className={'HookCheckOutForm_description_item'}>
+                <div className={'HookCheckOutForm_descriptionIndex'}>{(index+1)+'.'}&nbsp;</div>
+                <div className={'HookCheckOutForm_descriptionContent'}>{record}</div>
+              </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ------------------------------------add an account to current connect */}
+      <div className={'MultipartyPayment_item'}>
+        <div className={'MultipartyPayment_form'}>
+          <div className={'MultipartyPayment_title'} >create a stripe account linked to this connect</div>
+          <div className={'MultipartyPayment_cardDetail'} >
+            <label for="email">email:&nbsp;</label>
+            <input type='text' value={email} name={'email'} onChange={e=>setEmail(e.target.value)}></input>
+            &nbsp;(any email you like)
+          </div>
+          <div className={'MultipartyPayment_button'} onClick={handleCreateCustomAccountOnClick}>create custom account</div>
+        </div>
+        <div className={'MultipartyPayment_description'}>
+          {description_MultipartyPayment.map((record,index)=>(
+              <div className={'HookCheckOutForm_description_item'}>
+                <div className={'HookCheckOutForm_descriptionIndex'}>{(index+1)+'.'}&nbsp;</div>
+                <div className={'HookCheckOutForm_descriptionContent'}>{record}</div>
+              </div>
+          ))}
+        </div>
+      </div>
+      {/* <div className={'MultipartyPayment_item'}>
         <div className={'MultipartyPayment_form'}>
           <div className={'MultipartyPayment_title'} >Customer UI</div>
           <div className={'MultipartyPayment_cardName'}>Card A</div>
@@ -137,7 +220,7 @@ const MultipartyPayment = () => {
               </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
