@@ -32,7 +32,6 @@ const HookDirectElement = () => {
       card: cardElement,
     });
 
-    // const card = elements.getElement(CardElement);
     const stripeToken = await stripe.createToken(cardElement);
 
     if (error) {

@@ -15,11 +15,44 @@ const clientID = 'ca_JwdlRdCgDFfzaSbOZSnVd2FOCRWA5Vp8'
 
 // create a account
 router.post('/createCustomerAccount', async function(req, res, next) {
-  let {email} = req.body
+  let {email,BSB,account_number} = req.body
+  console.log(BSB)
+  // create a customer account
   const account = await stripe.accounts.create({
     type: 'custom',
     country: 'AU',
     email,
+    business_type: "individual",
+    // this is necessary for connect account, cause you will need to transfer money
+    external_account: {
+      object: "bank_account",
+      country: "AU",
+      currency: "AUD",
+      routing_number: BSB,
+      account_number,
+    },
+    // pre filled fields
+    individual: {
+      first_name: 'tester_f',
+      last_name: 'tester_l',
+      dob: {
+        day: 01,
+        month: 01,
+        year: 2000,
+      },
+      email: 'test@email.com',
+      phone: '+611800529728',
+      address: {
+        city: 'Brisbane',
+        country: 'AU',
+        line1: 'Queen St',
+        postal_code: '4000',
+        state: 'QLD'
+      },
+    },
+    business_profile: {
+      url: 'https://houkine.com'
+    },
     capabilities: {
       card_payments: {requested: true},
       transfers: {requested: true},
@@ -29,11 +62,11 @@ router.post('/createCustomerAccount', async function(req, res, next) {
       ip: req.connection.remoteAddress // Assumes you're not using a proxy
     }
   });
-
+  // ready to link
   const AccountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'https://www.google.com/',
-      return_url: 'https://www.google.com/',
+      refresh_url: 'http://localhost:3000/result/success',
+      return_url: 'http://localhost:3000/result/cancel',
       type: 'account_onboarding',
     }).catch(e=>{
       return res.status(400).json(AccountLink)
@@ -52,9 +85,23 @@ router.post('/createExpressAccount', async function(req, res, next) {
   return res.status(200).json(account)
 })
 
+router.get('/', async function(req, res, next) {
+  let {id} = req.body
+  const account = await stripe.accounts.retrieve(id);
+  // console.log(accounts.data)
+  return res.status(200).json(account)
+})
 router.get('/getAll', async function(req, res, next) {
   const accounts = await stripe.accounts.list({limit:100,});
   return res.status(200).json(accounts.data)
+})
+
+// get the balance of a user, returns the available money + pending money
+router.get('/balance', async function(req, res, next) {
+  let {stripeAccount}=req.query
+  const balance = await stripe.balance.retrieve({stripeAccount});
+  console.log(stripeAccount,balance.available[0].amount+balance.pending[0].amount)
+  return res.status(200).json(balance.available[0].amount+balance.pending[0].amount)
 })
 
 // get account activate link, used to verify user
@@ -81,69 +128,31 @@ router.delete('/deleteAccount', async function(req, res, next) {
 })
 
 
-router.post('/collectPayment', async function(req, res, next) {
+router.post('/payToAccountNoDelay', async function(req, res, next) {
 
-  let {Anumber, Aexp_month, Aexp_year, Acvc,}=req.body
-  //1 create account 
-  const account = await stripe.accounts.create({
-    type: 'custom',
-    country: 'AU',
-    email:'test@gmail.com',
-    business_type: "individual",
-    individual: {
-      first_name: 'first',
-      last_name: 'last',
-      dob: {
-        day: 1,
-        month: 1,
-        year: 2000,
-      },
-      email: 'test@gmail.com',
-      phone: '1234123123',
-      address: {
-        city: 'Brisbane',
-        country: 'Australia',
-        line1: '1024 Ann',
-        postal_code: '4000',
-        state: 'QLD'
-      },
+  let {PayToAccountNow_money,paymentMethod,id}=req.body
+  console.log(PayToAccountNow_money,paymentMethod.id,id)
+  //1 create payment intent
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: PayToAccountNow_money,
+    currency: 'aud',
+    payment_method_types: ['card'],
+    application_fee_amount: 5,
+    transfer_data: {
+      destination: id,
     },
-    business_profile: {
-      url: 'http://24hour.konnectapplications.xyz'
-    },
-    capabilities: {
-      card_payments: {requested: true},
-      transfers: {requested: true},
-    },
-    tos_acceptance: {
-      date: Math.floor(Date.now() / 1000),
-      ip: req.connection.remoteAddress // Assumes you're not using a proxy
-    }
   });
-  //2 generate token
-  const token = await stripe.tokens.create({
-    card: {
-      number: Anumber,
-      exp_month: Aexp_month,
-      exp_year: Aexp_year,
-      cvc: Acvc,
-    },
-  }).catch(e=>{
+  //2 confirm payment
+  const paymentResult = await stripe.paymentIntents.confirm(
+    paymentIntent.id,
+    {payment_method:paymentMethod.id},
+  ).catch(e=>{
+    console.log(e)
     return res.status(400)
   })
-  console.log('\ntoken id:',token.id)
-
-  //3 charge person, send money to stripe token
-  const charge = await stripe.charges.create({
-    amount: 50,
-    currency: 'aud',
-    // application_fee_amount: 5,
-    source: token.id,
-    transfer_group: "test_group"
-  });
-
+  // console.log('\paymentResult id:',paymentResult.id)
   // Return and display the result of the charge.
-  return res.status(200).json(charge)
+  return res.status(200).json('success')
 })
 router.post('/payout', async function(req, res, next) {
   let {id}=req.body
