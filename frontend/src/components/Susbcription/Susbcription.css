@@ -1,0 +1,44 @@
+.Susbcription_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+.Susbcription_item{
+    margin: 20px auto;
+    width: 100%;
+    display: flex;
+}
+.Susbcription_form{
+    width: 45%;
+    margin: auto;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+
+    border-style: solid;
+    border-color: blue;
+    border-radius: 10px;
+}
+.Susbcription_title{
+    margin: 5px auto;
+    font-size: 16px;
+    color: black;
+}
+.Susbcription_text{
+    width: 90%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: blue;
+}
+.CreateUser_card{
+    width: 90%;
+    margin: 5px auto;
+    background-color: #0000FF10;
+    padding: 10px;
+}

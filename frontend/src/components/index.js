@@ -4,6 +4,7 @@ import {loadStripe} from '@stripe/stripe-js';
 import {HookDirectElement} from './HookDirectElement';
 import {MultipartyPayment} from './MultipartyPayment';
 import {CreateAccount} from './CreateAccount';
+import {Susbcription} from './Susbcription';
 import logger from '../utils/logger';
 import './index.css'
 
@@ -35,7 +36,7 @@ const StripeContainer = ({setLogger,model}) => {
               {{
                   'account':<CreateAccount />,
                   'direct charge':<HookDirectElement/>,
-                  'subscribe':<div />,
+                  'subscribe':<Susbcription />,
                   'multipart payments':<MultipartyPayment />,
                   'refund':<div />,
               }[model]}

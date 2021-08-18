@@ -25,6 +25,7 @@ router.post('/', async function(req, res, next) {
     let user = {
         name,
         cus_id:customer.id,
+        sub_id:'',
     }
 
     // 3 add to database

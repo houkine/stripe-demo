@@ -28,6 +28,25 @@ const addUser  = (user) => {
     fs.writeFileSync(dbFile, data);   
 }
 
+const updateUser = (user) => {
+    let users = getUsers()
+    for (let index = 0; index < users.length; index++) {
+        if(users[index].cus_id == user.cus_id){
+            users[index]=user
+        }
+    }
+    let data = JSON.stringify(users);
+    fs.writeFileSync(dbFile, data);   
+}
+
+const findUser = (cus_id) => {
+    let users = getUsers()
+    for (let index = 0; index < users.length; index++) {
+        if(users[index].cus_id == cus_id){
+            return users[index]
+        }
+    }
+}
 module.exports = {
-    getUsers,addUser,
+    getUsers,addUser,updateUser,findUser,
 }
